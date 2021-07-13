@@ -12,3 +12,5 @@ numerical_encoder = load("numerical_encoder.pkl")
 ## dimensional characteristics -- > 11 dimensions
 
 st.write(categorical_encoder.get_feature_names())  ### GET THE MANUFACTURERS AND MODELS FROM THE TABLES INSTEAD OF THE ENCODERS.
+
+### EXPORT THE TABLE OF NUNIQUE? OR PERFORM MANUFACTURER-WISE QUERYING.
