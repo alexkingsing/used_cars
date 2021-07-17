@@ -4,7 +4,6 @@ import streamlit as st
 import plotly.graph_objects as go
 from joblib import load
 
-
 ## COMPLETED
 @st.cache  # caching all the loaders to avoid overhead lag
 def load_encoders() -> tuple:
@@ -43,6 +42,23 @@ def load_categories() -> pd.DataFrame:
     sample_base = load("categories_file.pkl")
 
     return sample_base
+
+## COMPLETED
+@st.cache # caching the filtered base so that it's only reloaded if the manufacturer is changed.
+def slice_categories(base: pd.DataFrame, filter) -> pd.DataFrame:
+    '''
+    Take a base dataframe and slice it 
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    A tuple of encoders
+    '''
+
+    return base[base["manufacturer"] == filter]
 
 def transform(data, cat_enc, num_enc) -> np.array:
     '''

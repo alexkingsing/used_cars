@@ -1,4 +1,5 @@
 import streamlit as st
+import numpy as np
 from utils import *
 from tensorflow.python.keras.saving.save import load_model
 
@@ -13,6 +14,11 @@ opt = st.sidebar.radio("Let's go!", ["Introduction","Price prediction"], )
 model = load_model("Keras Model")
 categorical_encoder, numerical_encoder = load_encoders()
 base = load_categories()
+
+# creating a separate array for MFG
+mfg_base = base["manufacturer"].unique()
+mfg_base = np.concatenate([np.array([""]), mfg_base]) # adding an empty value at the beginning so the user is forced to manually choose
+mfg_base = np.sort(mfg_base)
 
 if opt == "Introduction":
 
@@ -42,4 +48,12 @@ if opt == "Introduction":
     '''
 
 else:
-    st.table(base.head())
+    st.subheader("To start, let's select a vehicle manufacturer!")
+    mfg = st.selectbox("Manufacturer", options=mfg_base)
+
+    if mfg != "":
+        sliced_base = slice_categories(base, mfg)
+
+        with st.form(key= "main_form"):
+            st.selectbox(label= "OPTION", options= ["TEST1", "TEST2"])
+            st.form_submit_button(label= "Let's go!")
