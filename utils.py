@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
-import streamlit as st
 import plotly.graph_objects as go
+import streamlit as st
 from joblib import load
+
 
 ## COMPLETED
 @st.cache  # caching all the loaders to avoid overhead lag
@@ -47,15 +48,17 @@ def load_categories() -> pd.DataFrame:
 @st.cache # caching the filtered base so that it's only reloaded if the manufacturer is changed.
 def slice_categories(base: pd.DataFrame, filter) -> pd.DataFrame:
     '''
-    Take a base dataframe and slice it 
+    Take a base dataframe and slice it based on the filter.
+    This function caches the result of the slice so that if attributes other than the filter are changed the base is not reloaded.
 
     Parameters
     ----------
-    None
+    base: A Pandas dataframe that holds the base data.
+    filter: String that filters the manufacturer column.
 
     Returns
     -------
-    A tuple of encoders
+    A sliced-off Pandas Dataframe.
     '''
 
     return base[base["manufacturer"] == filter]
