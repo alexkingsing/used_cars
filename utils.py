@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from pandas.core.arrays import categorical
 import plotly.graph_objects as go
 import streamlit as st
 from joblib import load
@@ -69,7 +70,7 @@ def transform(data, cat_enc, num_enc) -> np.array:
 
     Parameters
     ----------
-    data: Iterable, numpy array or Pandas Dataframe holding the data needed for prediction.
+    data: Pandas Dataframe holding the data needed for prediction.
     cat_enc: Pre-fit categorical encoder to transform the categorical features into integers via one-hot encoding.
     num_enc: Pre-fit encoder to transform numerical features into a scaled form.
 
@@ -77,7 +78,21 @@ def transform(data, cat_enc, num_enc) -> np.array:
     -------
     a numpy array with the transformed array of data, prediction-ready.
     '''
-    pass
+    
+    # Extracting the features from the parent dataframe based on their type
+    categorical_vars = data.select_dtypes(include= "object")
+    numerical_vars= data.select_dtypes(exclude = "object")
+
+    # Since we are only doing one prediction at a time, let's do the dimensional transformation right away
+    categorical_vars = categorical_vars.to_numpy().reshape(1, -1)
+    numerical_vars = numerical_vars.to_numpy().reshape(1, -1)
+
+    categorical_vars = cat_enc.transform(categorical_vars)
+    numerical_vars = num_enc.transform(numerical_vars)
+
+    result_array = np.concatenate([categorical_vars, numerical_vars], axis=1)
+
+    return result_array
 
 def plot():
     pass

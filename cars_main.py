@@ -1,4 +1,5 @@
 import numpy as np
+from pandas.core.construction import array
 import streamlit as st
 import time
 import datetime
@@ -37,9 +38,6 @@ if opt == "Introduction":
     STEP 3:
     * Develop the selection side of the app
 
-    STEP 4:
-    * Encoder the information and perform prediction test
-
     STEP 5:
     * Create a plot showing the exact prediction and a range of MAX/MIN based on the models MAE.
 
@@ -50,7 +48,7 @@ if opt == "Introduction":
 
 else:
 
-    st.subheader("To start, let's select a vehicle manufacturer and if we want a simple, or detailed query!")
+    st.subheader("To start, let's select a manufacturer and the type of query! Simple (4 options) or detailed (ALL available)")
     # Sub-columns to allow both decisions to be simultaneous.
     col1, col2 = st.beta_columns(2)
     with col1:
@@ -61,7 +59,7 @@ else:
     if mfg != "":
         sliced_mfg = slice_categories(base, mfg)
 
-        ## supporting variables  ((TRY TO CACHE THIS???))
+        ## supporting variables  ((TRY TO CACHE THIS???))@@@@@@@@@@@@@@@@@@@
         states = np.sort(sliced_mfg["state"].unique())
         model_list = np.sort(sliced_mfg["model"].unique())
         min_odo = sliced_mfg["odometer"].min().item()
@@ -94,7 +92,7 @@ else:
             model_col, year_col, odometer_col, location = st.beta_columns(4)
             
             with model_col:
-                model = st.selectbox(label= "Choose a model!", options= model_list)
+                car_model = st.selectbox(label= "Choose a model!", options= model_list)
 
             with year_col:
                 # Since the base does not work with year, but with age, we will perform some transformations before continuing.
@@ -110,21 +108,31 @@ else:
                 state = st.selectbox(label= "Select your state!", options= states)
 
             if detailed == "Simple query": 
-                ## If doing a simple query, I will just take the most common response for all the remainig columns
+                ## If doing a simple query, I will just take the most common response for all the remaining columns
                 condition = sliced_mfg["condition"].mode().iloc[0]
                 cylinders = sliced_mfg["condition"].mode().iloc[0]
                 fuel = sliced_mfg["fuel"].mode().iloc[0]
                 transmission = sliced_mfg["transmission"].mode().iloc[0]
                 drive = sliced_mfg["drive"].mode().iloc[0]
-                type = sliced_mfg["type"].mode().iloc[0]
+                car_type = sliced_mfg["type"].mode().iloc[0]
                 color = sliced_mfg["paint_color"].mode().iloc[0]
             
+            ## MISSING THE SUPER DETAILED VIEW @@@@@@@@@@@@@@@
             else:
                 pass
 
-            features = {"mfg":mfg, "model": model, "condition":condition, "cylinders": cylinders, "fuel":fuel, "trans": transmission,
-                        "drive": drive, "type": type, "color": color, "odometer":odometer, "age": age}
+            features = {"mfg":mfg, "model": car_model, "condition":condition, "cylinders": cylinders, "fuel":fuel, "trans": transmission,
+                        "drive": drive, "type": car_type, "color": color, "state": state, "odometer":odometer, "age": age}
 
-            st.table(pd.DataFrame(features, index = [0]))
+            display_table = pd.DataFrame(features, index = [0])
             
-            st.form_submit_button(label= "Let's go!")
+            form = st.form_submit_button(label= "Let's go!")
+        
+        if form == True:
+            st.write("WE GOT HERE")
+
+            array_to_predict = transform(display_table, categorical_encoder, numerical_encoder)
+            st.write(model.predict(array_to_predict))
+            ### WE FINALLY HAVE PREDICTIOOOOOOOOON WOOOOOHOOOOOOOO @@@@@@@@@@
+
+            st.table(display_table)
