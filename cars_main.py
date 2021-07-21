@@ -1,10 +1,8 @@
 import numpy as np
-from pandas.core.construction import array
 import streamlit as st
-import time
 import datetime
+import plotly.graph_objects as go
 from tensorflow.python.keras.saving.save import load_model
-
 from utils import *
 
 #configs
@@ -13,6 +11,9 @@ st.set_page_config(layout="wide")
 # Start
 st.title("HERE COMES THE BOOM")
 opt = st.sidebar.radio("Let's go!", ["Introduction","Price prediction"], )
+
+# Manually adding the RMSE of the Keras model for plot use.
+deviation = 2894.679202
 
 # Loading model, categories and encoders.
 model = load_model("Keras Model")
@@ -132,7 +133,35 @@ else:
             st.write("WE GOT HERE")
 
             array_to_predict = transform(display_table, categorical_encoder, numerical_encoder)
-            st.write(model.predict(array_to_predict))
-            ### WE FINALLY HAVE PREDICTIOOOOOOOOON WOOOOOHOOOOOOOO @@@@@@@@@@
+            prediction = model.predict(array_to_predict).item()
+            upper_bound = prediction + deviation
+            lower_bound = prediction - deviation
 
-            st.table(display_table)
+            fig = go.Figure()
+
+            fig.add_trace(
+                go.Scatter(
+                    x = [1],
+                    y = [lower_bound]
+                )
+            )
+
+            fig.add_trace(
+                go.Scatter(
+                    x=[1],
+                    y=[prediction]
+                )
+            )
+
+            fig.add_trace(
+                go.Scatter(
+                    x=[1],
+                    y=[upper_bound]
+                )
+            )
+
+            ## ADD TWO SHAPES USING SVG PATHS https://www.w3schools.com/graphics/svg_path.asp 
+
+            st.plotly_chart(fig)
+
+            ### WE FINALLY HAVE PREDICTIOOOOOOOOON WOOOOOHOOOOOOOO @@@@@@@@@@

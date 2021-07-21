@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from pandas.core.arrays import categorical
-import plotly.graph_objects as go
 import streamlit as st
 from joblib import load
 
