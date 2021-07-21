@@ -9,7 +9,7 @@ from utils import *
 st.set_page_config(layout="wide")
 
 # Start
-st.title("HERE COMES THE BOOM")
+st.title("COOL TITLE FOR COOL APP")
 opt = st.sidebar.radio("Let's go!", ["Introduction","Price prediction"], )
 
 # Manually adding the RMSE of the Keras model for plot use.
@@ -136,31 +136,58 @@ else:
             prediction = model.predict(array_to_predict).item()
             upper_bound = prediction + deviation
             lower_bound = prediction - deviation
+            # I don't want any zero or negative lower bounds so let's add some logic here.
+            ## This should be part of the plot generating function
+            if (prediction - deviation) < 1000:
+                lower_bound = None
+            else:
+                pass
 
             fig = go.Figure()
 
             fig.add_trace(
                 go.Scatter(
                     x = [1],
-                    y = [lower_bound]
+                    y = [lower_bound],
+                    mode = "markers",
+                    name = "Minimum price",
+                    marker = dict(
+                        color = "green"
+                    )
                 )
             )
 
             fig.add_trace(
                 go.Scatter(
                     x=[1],
-                    y=[prediction]
+                    y=[prediction],
+                    mode="markers",
+                    name="Predicted price",
+                    marker=dict(
+                        color="black"
+                    )
                 )
             )
 
             fig.add_trace(
                 go.Scatter(
                     x=[1],
-                    y=[upper_bound]
+                    y=[upper_bound],
+                    mode="markers",
+                    name="Maximum price",
+                    marker=dict(
+                        color="red"
+                    )
                 )
             )
 
-            ## ADD TWO SHAPES USING SVG PATHS https://www.w3schools.com/graphics/svg_path.asp 
+            # Adding relevant figure based on SVG paths which are cool! https://www.w3schools.com/graphics/svg_path.asp 
+            fig.add_shape(
+                dict(
+                    type = "path",
+                    path = ""
+                )
+            )
 
             st.plotly_chart(fig)
 
