@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
-from pandas.core.arrays import categorical
+import plotly.graph_objects as go
 import streamlit as st
 from joblib import load
+from pandas.core.arrays import categorical
 
 
 ## COMPLETED
@@ -63,6 +64,8 @@ def slice_categories(base: pd.DataFrame, filter) -> pd.DataFrame:
 
     return base[base["manufacturer"] == filter]
 
+## COMPLETED.
+# Not worth caching as this func only runs at the end of a new data stream.
 def transform(data, cat_enc, num_enc) -> np.array:
     '''
     Function to transform input data into a prediction-ready array.
@@ -93,5 +96,95 @@ def transform(data, cat_enc, num_enc) -> np.array:
 
     return result_array
 
-def plot():
-    pass
+# Not worth caching as this func only runs at the end of a new data stream.
+def plot(prediction, deviation):
+    '''
+    Function to create plotly-figure plot to display the results of the prediction.
+
+    Parameters
+    ----------
+    Prediction: Target value predicted by the TF-Keras algorithm.
+    Deviation: Expected error (RMSE) of the algorithm based on test values
+
+    Returns
+    -------
+    A display-ready plotly figure.
+    '''
+
+    upper_bound = prediction + deviation
+    lower_bound = prediction - deviation
+    # I don't want any zero, close-to-zero, or negative lower bounds so let's add some logic here.
+    if lower_bound < 1000:
+        lower_bound = None
+    else:
+        pass
+
+    if lower_bound is not None:
+        fig = go.Figure()
+
+        fig.add_trace(
+            go.Scatter(
+                x=[1],
+                y=[lower_bound],
+                mode="markers",
+                name="Minimum price",
+                marker=dict(
+                    color="green"
+                )
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=[1],
+                y=[prediction],
+                mode="markers",
+                name="Predicted price",
+                marker=dict(
+                    color="black"
+                )
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=[1],
+                y=[upper_bound],
+                mode="markers",
+                name="Maximum price",
+                marker=dict(
+                    color="red"
+                )
+            )
+        )
+
+        # Horizontal delimeter for the lower bound
+        fig.add_shape(
+            type="line",
+            x0=0,
+            y0=lower_bound,
+            x1=2,
+            y1=lower_bound,
+            line=dict(
+                color="green",
+                dash="dot"
+            )
+        )
+
+        # Horizontal delimeter for the upper bound
+        fig.add_shape(
+            type="line",
+            x0=0,
+            y0=upper_bound,
+            x1=2,
+            y1=upper_bound,
+            line=dict(
+                color="red",
+                dash="dot"
+            )
+        )
+    
+    else:
+        pass
+
+    return fig
