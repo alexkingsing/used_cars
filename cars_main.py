@@ -46,94 +46,115 @@ if opt == "Introduction":
     '''
 
 else:
-
-    st.subheader("To start, let's select a manufacturer and the type of query! Simple (4 options) or detailed (ALL available)")
-    # Sub-columns to allow both decisions to be simultaneous.
+    st.subheader("To start, select a vehicle manufacturer and model!")
+    # Sub-columns to allow both decisions to be in the same position.
     col1, col2 = st.beta_columns(2)
+
     with col1:
+        # Storing the selected manufacturer.
         mfg = st.selectbox("Manufacturer", options=mfg_base)
-    with col2:
-        detailed = st.radio(label = "Query type", options=["Simple query", "Detailed query"])
 
     if mfg != "":
-        sliced_mfg = slice_categories(base, mfg)
+        # Delimit the current running table based on the MFG choice
+        sliced_mfg = slice_categories(base, "manufacturer", mfg)
 
-        ## supporting variables  ((TRY TO CACHE THIS???))@@@@@@@@@@@@@@@@@@@
-        states = np.sort(sliced_mfg["state"].unique())
+        # extract the list of known models for the MFG
         model_list = np.sort(sliced_mfg["model"].unique())
-        min_odo = sliced_mfg["odometer"].min().item()
-        max_odo = sliced_mfg["odometer"].max().item()
-        min_age = sliced_mfg["age"].min().item()
-        max_age = sliced_mfg["age"].max().item()
-        current_year = int(datetime.date.today().strftime("%Y"))
 
-        ''' REUSE THIS SECTION LATER TO RUN THE PREDICTIONS
-        ## adding an artificial 3 second wait to allow all supporting variables to load.
-        # The first placeholder is a string to explain what's going on
-        text_placeholder = st.empty()
-        text_placeholder.text("Loading...")
-        # The second placeholder is the progress bar
-        progress_section = st.empty()
-        with progress_section:
-            prog_bar = st.progress(0)
-            for second in range(1,4):
-                progress = second * 33
-                prog_bar.progress(progress)
-                time.sleep(1)
-        # clearing both placeholder.
-        text_placeholder.empty()
-        progress_section.empty()
-        '''
-
-        with st.form(key= "main_form"):
-            # Simplified form is only the model, manufacture year & odometer (slider).
-            # These are the default decisions regardless of any other user path.
-            model_col, year_col, odometer_col, location = st.beta_columns(4)
+        with col2:
+            # Storing the selected model
+            car_model = st.selectbox(label="Choose a model!", options=model_list)
             
-            with model_col:
-                car_model = st.selectbox(label= "Choose a model!", options= model_list)
+        if car_model != "":
+            # Do one final slice of the current table based on model.
+            sliced_model = slice_categories(sliced_mfg, "model", car_model)
 
-            with year_col:
-                # Since the base does not work with year, but with age, we will perform some transformations before continuing.
-                min_year = current_year - max_age
-                max_year = current_year - min_age
-                age = st.slider(label= "Manufacture year", min_value= min_year, max_value= max_year, step = 1.00)
-                age = current_year - age
+            # Final instructions
+            st.subheader("Finally, decide if you prefer a simple or detailed decision.")
 
-            with odometer_col:
-                odometer = st.slider(label="Odometer value in KM's", min_value=min_odo, max_value=max_odo, step=1.00)
+            # creating a column division to make it look better.
+            col3, placeholder1, placeholder2 = st.beta_columns(3)
 
-            with location:
-                state = st.selectbox(label= "Select your state!", options= states)
-
-            if detailed == "Simple query": 
-                ## If doing a simple query, I will just take the most common response for all the remaining columns
-                condition = sliced_mfg["condition"].mode().iloc[0]
-                cylinders = sliced_mfg["condition"].mode().iloc[0]
-                fuel = sliced_mfg["fuel"].mode().iloc[0]
-                transmission = sliced_mfg["transmission"].mode().iloc[0]
-                drive = sliced_mfg["drive"].mode().iloc[0]
-                car_type = sliced_mfg["type"].mode().iloc[0]
-                color = sliced_mfg["paint_color"].mode().iloc[0]
+            with col3:
+                detailed = st.select_slider(label = "Query type", options=["Simple query", "Detailed query"])
             
-            ## MISSING THE SUPER DETAILED VIEW @@@@@@@@@@@@@@@
-            else:
-                pass
+            ## supporting variables  ((TRY TO CACHE THIS???))@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            states = np.sort(sliced_model["state"].unique())
+            min_odo = sliced_model["odometer"].min().item()
+            max_odo = sliced_model["odometer"].max().item()
+            min_age = sliced_model["age"].min().item()
+            max_age = sliced_model["age"].max().item()
+            current_year = int(datetime.date.today().strftime("%Y"))
 
-            features = {"mfg":mfg, "model": car_model, "condition":condition, "cylinders": cylinders, "fuel":fuel, "trans": transmission,
-                        "drive": drive, "type": car_type, "color": color, "state": state, "odometer":odometer, "age": age}
+            with st.form(key= "main_form"):
+                # Simplified form is only the model, manufacture year & odometer (slider).
+                # These are the default decisions regardless of any other user path.
+                year_col, odometer_col, location = st.beta_columns(3)
+                
+                with year_col:
+                    # Since the base does not work with year, but with age, we will perform some transformations before continuing.
 
-            display_table = pd.DataFrame(features, index = [0])
+                    min_year = current_year - max_age
+                    max_year = current_year - min_age
+
+                    if max_year <= min_year:
+                        st.write(f"The manufacture year for this vehicle has been set to:")
+                        st.write(max_year)
+                        age = current_year - max_year 
+                    else:
+                        age = st.slider(label= "Manufacture year", min_value= min_year, max_value= max_year, step = 1.00)
+                        age = current_year - age
+
+                with odometer_col:
+                    odometer = st.slider(label="Odometer value in KM's", min_value=min_odo, max_value=max_odo, step=1.00)
+
+                with location:
+                    state = st.selectbox(label= "Select your state!", options= states)
+
+                if detailed == "Simple query": 
+                    ## If doing a simple query, I will just take the most common response for all the remaining columns
+                    condition = sliced_model["condition"].mode().iloc[0]
+                    cylinders = sliced_model["condition"].mode().iloc[0]
+                    fuel = sliced_model["fuel"].mode().iloc[0]
+                    transmission = sliced_model["transmission"].mode().iloc[0]
+                    drive = sliced_model["drive"].mode().iloc[0]
+                    car_type = sliced_model["type"].mode().iloc[0]
+                    color = sliced_model["paint_color"].mode().iloc[0]
+                
+                ## MISSING THE SUPER DETAILED VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                else:
+                    pass
+
+                features = {"mfg":mfg, "model": car_model, "condition":condition, "cylinders": cylinders, "fuel":fuel, "trans": transmission,
+                            "drive": drive, "type": car_type, "color": color, "state": state, "odometer":odometer, "age": age}
+
+                display_table = pd.DataFrame(features, index = [0])
+                
+                form = st.form_submit_button(label= "Let's go!")
             
-            form = st.form_submit_button(label= "Let's go!")
-        
-        if form == True:
-            st.write("WE GOT HERE")
+            if form == True:
 
-            array_to_predict = transform(display_table, categorical_encoder, numerical_encoder)
-            prediction = model.predict(array_to_predict).item()            
+                array_to_predict = transform(display_table, categorical_encoder, numerical_encoder)
+                prediction = model.predict(array_to_predict).item()            
 
-            figure = plot(prediction, deviation)
+                figure = plot(prediction, deviation)
 
-            st.plotly_chart(figure)
+                st.plotly_chart(figure, use_container_width = True) 
 
+                ''' REUSE THIS SECTION LATER TO RUN THE PREDICTIONS
+                ## adding an artificial 3 second wait to allow all supporting variables to load.
+                # The first placeholder is a string to explain what's going on
+                text_placeholder = st.empty()
+                text_placeholder.text("Loading...")
+                # The second placeholder is the progress bar
+                progress_section = st.empty()
+                with progress_section:
+                    prog_bar = st.progress(0)
+                    for second in range(1,4):
+                        progress = second * 33
+                        prog_bar.progress(progress)
+                        time.sleep(1)
+                # clearing both placeholder.
+                text_placeholder.empty()
+                progress_section.empty()
+                '''

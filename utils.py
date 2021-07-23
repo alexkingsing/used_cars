@@ -47,7 +47,7 @@ def load_categories() -> pd.DataFrame:
 
 ## COMPLETED
 @st.cache # caching the filtered base so that it's only reloaded if the manufacturer is changed.
-def slice_categories(base: pd.DataFrame, filter) -> pd.DataFrame:
+def slice_categories(base: pd.DataFrame, column: str, filter) -> pd.DataFrame:
     '''
     Take a base dataframe and slice it based on the filter.
     This function caches the result of the slice so that if attributes other than the filter are changed the base is not reloaded.
@@ -62,7 +62,7 @@ def slice_categories(base: pd.DataFrame, filter) -> pd.DataFrame:
     A sliced-off Pandas Dataframe.
     '''
 
-    return base[base["manufacturer"] == filter]
+    return base[base[column] == filter]
 
 ## COMPLETED.
 # Not worth caching as this func only runs at the end of a new data stream.
