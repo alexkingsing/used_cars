@@ -1,13 +1,19 @@
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-import streamlit as st
 from joblib import load
-from pandas.core.arrays import categorical
+from streamlit import cache
+
+import intro
 
 
 ## COMPLETED
-@st.cache  # caching all the loaders to avoid overhead lag
+@cache  # caching all the loaders to avoid overhead lag
+def load_intro(section: str) -> str:
+    return intro.intro[section]
+
+## COMPLETED
+@cache  # caching all the loaders to avoid overhead lag
 def load_encoders() -> tuple:
     '''
     A simple function to mask and simplify the loading of both encoders.
@@ -27,7 +33,7 @@ def load_encoders() -> tuple:
     return categorical_encoder, numerical_encoder
 
 ## COMPLETED
-@st.cache  # caching all the loaders to avoid overhead lag
+@cache  # caching all the loaders to avoid overhead lag
 def load_categories() -> pd.DataFrame:
     '''
     This function loads the dataframe that contains the labels used during training of the model.
@@ -46,7 +52,7 @@ def load_categories() -> pd.DataFrame:
     return sample_base
 
 ## COMPLETED
-@st.cache # caching the filtered base so that it's only reloaded if the manufacturer is changed.
+@cache # caching the filtered base so that it's only reloaded if the manufacturer is changed.
 def slice_categories(base: pd.DataFrame, column: str, filter) -> pd.DataFrame:
     '''
     Take a base dataframe and slice it based on the filter.
@@ -63,6 +69,9 @@ def slice_categories(base: pd.DataFrame, column: str, filter) -> pd.DataFrame:
     '''
 
     return base[base[column] == filter]
+
+def simplify_detailed_view():
+    pass
 
 ## COMPLETED.
 # Not worth caching as this func only runs at the end of a new data stream.
@@ -96,6 +105,7 @@ def transform(data, cat_enc, num_enc) -> np.array:
 
     return result_array
 
+## COMPLETED
 # Not worth caching as this func only runs at the end of a new data stream.
 def plot(prediction, deviation):
     '''
@@ -184,20 +194,46 @@ def plot(prediction, deviation):
                 dash="dot"
             )
         )
-
-        fig.add_shape(
-            type="rect",
-            x0=0,
-            y0=lower_bound,
-            x1=2,
-            y1=prediction,
-            line=dict(
-                color='rgba(124, 252, 0, 0.05)'
-            ),
-            fillcolor='rgba(124, 252, 0, 0.05)'
-        )
     
+    ## This is the case when the lower bound is too small we'd rather ignore it.
     else:
-        pass
+        fig = go.Figure()
+
+        fig.add_trace(
+            go.Scatter(
+                x=[1],
+                y=[prediction],
+                mode="markers",
+                name="Expected price",
+                marker=dict(
+                    color="black"
+                )
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=[1],
+                y=[upper_bound],
+                mode="markers",
+                name="Maximum price",
+                marker=dict(
+                    color="red"
+                )
+            )
+        )
+
+        # Horizontal delimeter for the upper bound
+        fig.add_shape(
+            type="line",
+            x0=0,
+            y0=upper_bound,
+            x1=2,
+            y1=upper_bound,
+            line=dict(
+                color="red",
+                dash="dot"
+            )
+        )
 
     return fig
