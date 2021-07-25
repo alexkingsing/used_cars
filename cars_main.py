@@ -1,8 +1,10 @@
 import datetime
+import time
 
 import numpy as np
 import streamlit as st
 from tensorflow.python.keras.saving.save import load_model
+from tensorflow.python.ops.control_flow_ops import cond
 
 from utils import *
 
@@ -33,10 +35,6 @@ if opt == "Introduction":
     * Create a small introduction page explaining what the project is, where it came from (in summary) and describe what the project
     is going to do.
 
-    STEP 2: 
-    * Create supporting functions so that the front-end side of the application is not loaded with too many options.
-    * Cache as many things as possible.
-
     STEP 3:
     * Develop the selection side of the app
 
@@ -60,6 +58,7 @@ else:
 
         # extract the list of known models for the MFG
         model_list = np.sort(sliced_mfg["model"].unique())
+        model_list = np.concatenate([np.array([""]), model_list])
 
         with col2:
             # Storing the selected model
@@ -78,8 +77,7 @@ else:
             with col3:
                 detailed = st.select_slider(label = "Query type", options=["Simple query", "Detailed query"])
             
-            ## supporting variables  ((TRY TO CACHE THIS???))@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            states = np.sort(sliced_model["state"].unique())
+            ## supporting variables for the simple general form
             min_odo = sliced_model["odometer"].min().item()
             max_odo = sliced_model["odometer"].max().item()
             min_age = sliced_model["age"].min().item()
@@ -89,7 +87,7 @@ else:
             with st.form(key= "main_form"):
                 # Simplified form is only the model, manufacture year & odometer (slider).
                 # These are the default decisions regardless of any other user path.
-                year_col, odometer_col, location = st.beta_columns(3)
+                year_col, odometer_col = st.beta_columns(2)
                 
                 with year_col:
                     # Since the base does not work with year, but with age, we will perform some transformations before continuing.
@@ -108,41 +106,49 @@ else:
                 with odometer_col:
                     odometer = st.slider(label="Odometer value in KM's", min_value=min_odo, max_value=max_odo, step=1.00)
 
-                with location:
-                    state = st.selectbox(label= "Select your state!", options= states)
-
                 if detailed == "Simple query": 
                     ## If doing a simple query, I will just take the most common response for all the remaining columns
                     condition = sliced_model["condition"].mode().iloc[0]
-                    cylinders = sliced_model["condition"].mode().iloc[0]
+                    cylinders = sliced_model["cylinders"].mode().iloc[0]
                     fuel = sliced_model["fuel"].mode().iloc[0]
                     transmission = sliced_model["transmission"].mode().iloc[0]
                     drive = sliced_model["drive"].mode().iloc[0]
                     car_type = sliced_model["type"].mode().iloc[0]
                     color = sliced_model["paint_color"].mode().iloc[0]
+                    state = sliced_model["state"].mode().iloc[0]
                 
-                ## MISSING THE SUPER DETAILED VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                else:
-                    pass
+                elif detailed == "Detailed query": ## THINK OF SOME SIMPLIFICATIONS IN THE CASE WHERE THERE'S ONLY ONE OPTION
+                    detail_col1, detail_col2, detail_col3, detail_col4 = st.beta_columns(4)
+
+                    with detail_col1:
+                        condition = st.selectbox("Car's condition", options=sliced_model["condition"].unique())
+                        cylinders = st.selectbox("Car's cylinders", options=sliced_model["cylinders"].unique())
+                    
+                    with detail_col2:
+                        fuel = st.selectbox("Car's fuel", options=sliced_model["fuel"].unique())
+                        state = st.selectbox("Buyer's state", options=sliced_model["state"].str.upper().unique())
+                    
+                    with detail_col3:
+                        drive = st.selectbox("Drive type", options=sliced_model["drive"].unique())
+                        transmission = st.selectbox("Transmission type", options=sliced_model["transmission"].unique())
+                    
+                    with detail_col4:
+                        
+                        car_type = st.selectbox("Car type", options=sliced_model["type"].unique())
+                        color = st.selectbox("Car's color", options=sliced_model["paint_color"].unique())
+                
 
                 features = {"mfg":mfg, "model": car_model, "condition":condition, "cylinders": cylinders, "fuel":fuel, "trans": transmission,
                             "drive": drive, "type": car_type, "color": color, "state": state, "odometer":odometer, "age": age}
 
+                # Creating a dataframe if later on the user wants to see the form of the data being passed to the NN
                 display_table = pd.DataFrame(features, index = [0])
                 
                 form = st.form_submit_button(label= "Let's go!")
             
             if form == True:
-
-                array_to_predict = transform(display_table, categorical_encoder, numerical_encoder)
-                prediction = model.predict(array_to_predict).item()            
-
-                figure = plot(prediction, deviation)
-
-                st.plotly_chart(figure, use_container_width = True) 
-
-                ''' REUSE THIS SECTION LATER TO RUN THE PREDICTIONS
-                ## adding an artificial 3 second wait to allow all supporting variables to load.
+                
+                ## adding an artificial 2 second for dramatic effect!
                 # The first placeholder is a string to explain what's going on
                 text_placeholder = st.empty()
                 text_placeholder.text("Loading...")
@@ -150,11 +156,19 @@ else:
                 progress_section = st.empty()
                 with progress_section:
                     prog_bar = st.progress(0)
-                    for second in range(1,4):
-                        progress = second * 33
+                    for second in range(1,3):
+                        progress = second * 50
                         prog_bar.progress(progress)
                         time.sleep(1)
                 # clearing both placeholder.
                 text_placeholder.empty()
                 progress_section.empty()
-                '''
+                
+                array_to_predict = transform(display_table, categorical_encoder, numerical_encoder)
+                prediction = model.predict(array_to_predict).item()            
+
+                figure = plot(prediction, deviation)
+
+                st.plotly_chart(figure, use_container_width = True) 
+
+

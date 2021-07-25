@@ -113,6 +113,7 @@ def plot(prediction, deviation):
 
     upper_bound = prediction + deviation
     lower_bound = prediction - deviation
+
     # I don't want any zero, close-to-zero, or negative lower bounds so let's add some logic here.
     if lower_bound < 1000:
         lower_bound = None
@@ -139,7 +140,7 @@ def plot(prediction, deviation):
                 x=[1],
                 y=[prediction],
                 mode="markers",
-                name="Predicted price",
+                name="Expected price",
                 marker=dict(
                     color="black"
                 )
@@ -182,6 +183,18 @@ def plot(prediction, deviation):
                 color="red",
                 dash="dot"
             )
+        )
+
+        fig.add_shape(
+            type="rect",
+            x0=0,
+            y0=lower_bound,
+            x1=2,
+            y1=prediction,
+            line=dict(
+                color='rgba(124, 252, 0, 0.05)'
+            ),
+            fillcolor='rgba(124, 252, 0, 0.05)'
         )
     
     else:
