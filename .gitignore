@@ -2,3 +2,4 @@
 data/vehicles.csv
 .ipynb_checkpoints/Used_cars_Dev-checkpoint.ipynb
 __pycache__/utils.cpython-37.pyc
+__pycache__/intro.cpython-37.pyc
