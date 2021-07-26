@@ -41,7 +41,7 @@ if opt == "Introduction":
     * Look for an image of the vehicle and include it as part of the results.
 
     '''
-
+            ############################################ SECTION SEPARATOR FOR VISIBILITY ############################################
 else:
     st.subheader("To start, select a vehicle manufacturer and model!")
     # Sub-columns to allow both decisions to be in the same position.
@@ -82,7 +82,8 @@ else:
             min_age = sliced_model["age"].min().item()
             max_age = sliced_model["age"].max().item()
             current_year = int(datetime.date.today().strftime("%Y"))
-
+            
+            ############################################ SECTION SEPARATOR FOR VISIBILITY ############################################
             with st.form(key= "main_form"):
                 # Simplified form is only the model, manufacture year & odometer (slider).
                 # These are the default decisions regardless of any other user path.
