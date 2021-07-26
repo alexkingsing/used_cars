@@ -4,8 +4,7 @@ import plotly.graph_objects as go
 from joblib import load
 from streamlit import cache
 
-import intro
-
+import intro    
 
 ## COMPLETED
 @cache  # caching all the loaders to avoid overhead lag
@@ -70,8 +69,16 @@ def slice_categories(base: pd.DataFrame, column: str, filter) -> pd.DataFrame:
 
     return base[base[column] == filter]
 
-def simplify_detailed_view():
-    pass
+## COMPLETED
+@cache # caching the filtered base so that it's only reloaded if the manufacturer is changed.
+def detailed_view(base: pd.DataFrame, column: str):
+    
+    unique_elements = base[column].unique()
+
+    if len(unique_elements) < 2:
+        return base[column].unique().item()
+    else:
+        return base[column].unique()
 
 ## COMPLETED.
 # Not worth caching as this func only runs at the end of a new data stream.

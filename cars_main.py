@@ -10,11 +10,6 @@ from utils import *
 #configs
 st.set_page_config(layout="wide")
 
-# Start
-st.title("Used vehicles price prediction")
-st.sidebar.subheader("Choose what you want to see!")
-opt = st.sidebar.radio("", ["Introduction","Price prediction"], )
-
 # Manually adding the RMSE of the Keras model for plot use.
 deviation = 2894.679202
 
@@ -28,21 +23,33 @@ mfg_base = base["manufacturer"].unique()
 mfg_base = np.concatenate([np.array([""]), mfg_base]) # adding an empty value at the beginning so the user is forced to manually choose
 mfg_base = np.sort(mfg_base)
 
+# Start with titles and landing-page design.
+st.title("Used vehicles price prediction! (BETA)")
+st.sidebar.subheader("Choose what you want to see!")
+opt = st.sidebar.radio("", ["Introduction","Price prediction", "Tool explanation"], )
+
+## COMPLETED
 if opt == "Introduction":
 
-    st.write(load_intro("opening"))
-    st.write(load_intro("body"))
+    # Intro start
+    st.subheader(load_intro("opening"))
+    st.write(load_intro("body1"))
 
-    '''
-    STEP 3:
-    * Develop the selection side of the app
+    # Notebook
+    st.write(load_intro("notebook"))
 
-    OPT STEP 6:
-    * Look for an image of the vehicle and include it as part of the results.
+    # Intro end
+    st.write(load_intro("body2"))
+    st.write(load_intro("body3"))
 
-    '''
+    # Contact info
+    st.write(load_intro("contact"))
+
+
             ############################################ SECTION SEPARATOR FOR VISIBILITY ############################################
-else:
+
+## IN COMPLETED
+elif opt == "Price prediction":
     st.subheader("To start, select a vehicle manufacturer and model!")
     # Sub-columns to allow both decisions to be in the same position.
     col1, col2 = st.beta_columns(2)
@@ -94,15 +101,14 @@ else:
                     min_year = current_year - max_age
                     max_year = current_year - min_age
                     if max_year <= min_year:
-                        st.write(f"The manufacture year for this vehicle has been set to:")
-                        st.write(max_year)
+                        st.write(f"The manufacture year for this vehicle has been set to: **{max_year}**")
                         age = current_year - max_year 
                     else:
                         age = st.slider(label= "Manufacture year", min_value= min_year, max_value= max_year, step = 1.00)
                         age = current_year - age
 
                 with odometer_col:
-                    odometer = st.slider(label="Odometer value in KM's", min_value=min_odo, max_value=max_odo, step=1.00)
+                    odometer = st.slider(label="Odometer value in KM's", min_value=min_odo, max_value=max_odo, step= 100.00)
 
                 ############################################ SECTION SEPARATOR FOR VISIBILITY ############################################
 
@@ -117,24 +123,57 @@ else:
                     color = sliced_model["paint_color"].mode().iloc[0]
                     state = sliced_model["state"].mode().iloc[0]
                 
-                elif detailed == "Detailed query": ## THINK OF SOME SIMPLIFICATIONS IN THE CASE WHERE THERE'S ONLY ONE OPTION
+                elif detailed == "Detailed query":
                     detail_col1, detail_col2, detail_col3, detail_col4 = st.beta_columns(4)
 
                     with detail_col1:
-                        condition = st.selectbox("Car's condition", options=sliced_model["condition"].unique())
-                        cylinders = st.selectbox("Car's cylinders", options=sliced_model["cylinders"].unique())
+                        condition = detailed_view(sliced_model, "condition")
+                        if isinstance(condition, str) == True:
+                            st.write(f"Car's condition has been set to **{condition}**")
+                        else:
+                            condition = st.selectbox("Car's condition", options=condition)
+                        
+                        cylinders = detailed_view(sliced_model, "cylinders")
+                        if isinstance(cylinders, str) == True:
+                            st.write(f"Car's condition has been set to **{cylinders}**")
+                        else:
+                            cylinders = st.selectbox("Car's cylinders", options=cylinders)
                     
                     with detail_col2:
-                        fuel = st.selectbox("Car's fuel", options=sliced_model["fuel"].unique())
-                        state = st.selectbox("Buyer's state", options=sliced_model["state"].str.upper().unique())
+                        fuel = detailed_view(sliced_model, "fuel")
+                        if isinstance(fuel, str) == True:
+                            st.write(f"Car's fuel type has been set to: **{fuel}**")
+                        else:
+                            fuel = st.selectbox("Car's fuel", options=fuel)
+                        
+                        state = detailed_view(sliced_model, "state")
+                        state = st.selectbox("Buyer's state", options=state)
                     
                     with detail_col3:
-                        drive = st.selectbox("Drive type", options=sliced_model["drive"].unique())
-                        transmission = st.selectbox("Transmission type", options=sliced_model["transmission"].unique())
+                        drive = detailed_view(sliced_model, "drive")
+                        if isinstance(drive, str) == True:
+                            st.write(f"Car's drive type has been set to: **{drive}**")
+                        else:
+                            drive = st.selectbox("Drive type", options=drive)
+                        
+                        transmission = detailed_view(sliced_model, "transmission")
+                        if isinstance(transmission, str) == True:
+                            st.write(f"Transmission type set to: **{transmission}**")
+                        else:
+                            transmission = st.selectbox("Transmission type", options=transmission)
                     
                     with detail_col4:
-                        car_type = st.selectbox("Car type", options=sliced_model["type"].unique())
-                        color = st.selectbox("Car's color", options=sliced_model["paint_color"].unique())
+                        car_type = detailed_view(sliced_model, "type")
+                        if isinstance(car_type, str) == True:
+                            st.write(f"Car's type has been set to: **{car_type}**")
+                        else:
+                            car_type = st.selectbox("Car type", options=car_type)
+                        
+                        color = detailed_view(sliced_model, "paint_color")
+                        if isinstance(color, str) == True:
+                            st.write(f"Car's color has been set to: **{color}**")
+                        else:
+                            color = st.selectbox("Car's color", options=color)
                 
 
                 features = {"mfg":mfg, "model": car_model, "condition":condition, "cylinders": cylinders, "fuel":fuel, "trans": transmission,
@@ -172,4 +211,6 @@ else:
 
                 st.plotly_chart(figure, use_container_width = True) 
 
-
+## PENDING
+elif opt == "Tool explanation":
+    st.write("SECTION TO BE CONSTRUCTED...")
