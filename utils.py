@@ -3,13 +3,22 @@ import pandas as pd
 import plotly.graph_objects as go
 from joblib import load
 from streamlit import cache
-
+import re
 import intro    
+import explanation
 
 ## COMPLETED
 @cache  # caching all the loaders to avoid overhead lag
 def load_intro(section: str) -> str:
     return intro.intro[section]
+
+## COMPLETED
+@cache  # caching all the loaders to avoid overhead lag
+def load_exp(section: str) -> str:
+    if isinstance(re.search(".*title.*", section), re.Match) == True:
+        return f"**{explanation.exp[section]}**" ## this is so titles can be bolded automatically.
+    else:
+        return explanation.exp[section]
 
 ## COMPLETED
 @cache  # caching all the loaders to avoid overhead lag
@@ -26,8 +35,8 @@ def load_encoders() -> tuple:
     A tuple of encoders 
     '''
 
-    categorical_encoder = load("categorical_encoder.pkl")
-    numerical_encoder = load("numerical_encoder.pkl")
+    categorical_encoder = load("support/categorical_encoder.pkl")
+    numerical_encoder = load("support/numerical_encoder.pkl")
 
     return categorical_encoder, numerical_encoder
 
@@ -46,7 +55,7 @@ def load_categories() -> pd.DataFrame:
     -------
     A tuple of encoders
     '''
-    sample_base = load("categories_file.pkl")
+    sample_base = load("support/categories_file.pkl")
 
     return sample_base
 
@@ -64,13 +73,13 @@ def slice_categories(base: pd.DataFrame, column: str, filter) -> pd.DataFrame:
 
     Returns
     -------
-    A sliced-off Pandas Dataframe.
+    A sliced-off Pandas Dataframe based on a single category/column.
     '''
 
     return base[base[column] == filter]
 
 ## COMPLETED
-@cache # caching the filtered base so that it's only reloaded if the manufacturer is changed.
+@cache # caching.
 def detailed_view(base: pd.DataFrame, column: str):
     
     unique_elements = base[column].unique()

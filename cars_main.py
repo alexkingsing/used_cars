@@ -1,5 +1,4 @@
 import datetime
-import time
 
 import numpy as np
 import streamlit as st
@@ -188,22 +187,6 @@ elif opt == "Price prediction":
 
             if form == True:
                 
-                ## adding an artificial 2 second for dramatic effect!
-                # The first placeholder is a string to explain what's going on
-                text_placeholder = st.empty()
-                text_placeholder.text("Loading...")
-                # The second placeholder is the progress bar
-                progress_section = st.empty()
-                with progress_section:
-                    prog_bar = st.progress(0)
-                    for second in range(1,3):
-                        progress = second * 50
-                        prog_bar.progress(progress)
-                        time.sleep(1)
-                # clearing both placeholder.
-                text_placeholder.empty()
-                progress_section.empty()
-                
                 array_to_predict = transform(display_table, categorical_encoder, numerical_encoder)
                 prediction = model.predict(array_to_predict).item()            
 
@@ -213,4 +196,14 @@ elif opt == "Price prediction":
 
 ## PENDING
 elif opt == "Tool explanation":
-    st.write("SECTION TO BE CONSTRUCTED...")
+    st.write(load_exp("intro"))
+    st.header(load_exp("ml_title"))
+
+    exp_col1, exp_col2 = st.beta_columns(2)
+    with exp_col1:
+        st.write(load_exp("ml_intro"))
+        button = st.button("Tell me!")
+    if button == True:
+        with exp_col2:
+            st.image(load_exp("horse"))
+    st.write(load_exp("ml_close"))
