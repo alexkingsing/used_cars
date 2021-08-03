@@ -1,5 +1,5 @@
-exp = {"intro": '''Welcome to the explanation section! In here I will provide a quick refresher on what is Machine/Deep Learning.
-After that, I will explain with a bit more detail how the model you're using here works! \n
+exp = {"intro": '''Welcome to the explanation section! In here I will provide a quick refresher on **what is Machine/Deep Learning**.
+After that, I will explain with a bit more detail **how the model you're using here works!** \n
 So let's get to it!''',
             "ml_title": "What is Machine / Deep Learning?",
             "ml_intro":'''So, what is Machine Learning? Long story short, machine learning can be summarized:
@@ -12,4 +12,6 @@ most likely no, it could be a cat or a dog, or even horse, right? \n
 No? click the button below!''',
             "horse": "images/horse.jpg",
             "ml_close": '''What we did just now is a **very simplified** version of machine learning!
-We discussed characteristics (features in ML/DL) of the animal, and then you (the machine!) tried to guess what it was.'''}
+We discussed characteristics (features in ML/DL) of the animal, and then you (the machine!) tried to guess what it was.''',
+            "model_intro":''' BLABLA ''',
+            "model_explanation": ''' '''}
