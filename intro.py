@@ -2,7 +2,7 @@ intro = {"opening": '''Welcome! My name is **Alexander J. King Sing Ortiz** and 
         "body1":'''This **price-prediction project** is the culmination of my efforts and interest in the field of Data Science.
                 As as self-taught Python user and data enthusiast, I hope this app is useful and of your liking!''',
         "notebook": '''The **Jupyter notebook** with the Exploratory Data Analysis (EDA), Analysis and Model training can be found at:
-                https://github.com/alexkingsing/used_cars/blob/main/Used_cars_Dev.ipynb''',
+                https://github.com/alexkingsing/used_cars/blob/main/notebook/Used_cars_Dev.ipynb''',
         "body2": '''This app has three sections:
                 \n * **Introduction**: You're reading this right now! \U0001F9D0
                 \n * **Price prediction**: The actual tool to predict the price of used cars! If you find any bugs or unwanted behaviour, please reach out to me! (contacts below).
