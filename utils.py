@@ -1,11 +1,14 @@
+import re
+
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from joblib import load
 from streamlit import cache
-import re
-import intro    
+
 import explanation
+import intro
+
 
 ## COMPLETED
 @cache  # caching all the loaders to avoid overhead lag
@@ -53,7 +56,7 @@ def load_categories() -> pd.DataFrame:
 
     Returns
     -------
-    A tuple of encoders
+    A Pandas Dataframe containing the supported information
     '''
     sample_base = load("support/categories_file.pkl")
 
@@ -61,7 +64,7 @@ def load_categories() -> pd.DataFrame:
 
 ## COMPLETED
 @cache # caching the filtered base so that it's only reloaded if the manufacturer is changed.
-def slice_categories(base: pd.DataFrame, column: str, filter) -> pd.DataFrame:
+def slice_categories(base: pd.DataFrame, column: str, filter: str) -> pd.DataFrame:
     '''
     Take a base dataframe and slice it based on the filter.
     This function caches the result of the slice so that if attributes other than the filter are changed the base is not reloaded.
@@ -69,6 +72,7 @@ def slice_categories(base: pd.DataFrame, column: str, filter) -> pd.DataFrame:
     Parameters
     ----------
     base: A Pandas dataframe that holds the base data.
+    column: The column to be used as a reference.
     filter: String that filters the manufacturer column.
 
     Returns
@@ -81,7 +85,19 @@ def slice_categories(base: pd.DataFrame, column: str, filter) -> pd.DataFrame:
 ## COMPLETED
 @cache # caching.
 def detailed_view(base: pd.DataFrame, column: str):
-    
+    '''
+    Take a base dataframe, explore and return the unique items based on a reference column.
+
+    Parameters
+    ----------
+    column: The column to be used as a reference.
+
+    Returns
+    -------
+    A string if only one item is found.
+    A numpy.array of all unique values.
+    '''
+
     unique_elements = base[column].unique()
 
     if len(unique_elements) < 2:

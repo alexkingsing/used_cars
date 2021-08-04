@@ -23,7 +23,7 @@ mfg_base = np.concatenate([np.array([""]), mfg_base]) # adding an empty value at
 mfg_base = np.sort(mfg_base)
 
 # Start with titles and landing-page design.
-st.title("Used vehicles price prediction! (BETA)")
+st.title("U.S.A Used vehicles price prediction! (BETA)")
 st.sidebar.subheader("Choose what you want to see!")
 opt = st.sidebar.radio("", ["Introduction","Price prediction", "Tool explanation"], )
 
@@ -33,13 +33,14 @@ if opt == "Introduction":
     # Intro start
     st.subheader(load_intro("opening"))
     st.write(load_intro("body1"))
-
-    # Notebook
-    st.write(load_intro("notebook"))
+    st.write(load_intro("disclaimer"))
 
     # Intro end
     st.write(load_intro("body2"))
     st.write(load_intro("body3"))
+
+    # Notebook
+    st.write(load_intro("notebook"))
 
     # Contact info
     st.write(load_intro("contact"))
@@ -134,7 +135,7 @@ elif opt == "Price prediction":
                         
                         cylinders = detailed_view(sliced_model, "cylinders")
                         if isinstance(cylinders, str) == True:
-                            st.write(f"Car's condition has been set to **{cylinders}**")
+                            st.write(f"Car's cylinders have been set to **{cylinders}**")
                         else:
                             cylinders = st.selectbox("Car's cylinders", options=cylinders)
                     
@@ -196,6 +197,8 @@ elif opt == "Price prediction":
 
 ## PENDING
 elif opt == "Tool explanation":
+
+    # ML SECTION
     st.write(load_exp("intro"))
     st.header(load_exp("ml_title"))
 
@@ -207,3 +210,9 @@ elif opt == "Tool explanation":
         with exp_col2:
             st.image(load_exp("horse"))
     st.write(load_exp("ml_close"))
+
+    # MODEL SECTION
+    st.header(load_exp("model_title"))
+    st.write(load_exp("model_intro"))
+    st.table(np.array([["Car manufacturer","Car model", "Manufacture year", "Odometer", "Car's condition", "Fuel type", "Drive type",
+    "Car's type", "Car's cylinders", "Buyer's state", "Transmission type", "Car's color"]]))
