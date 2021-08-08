@@ -81,7 +81,7 @@ elif opt == "Price prediction":
             col3, placeholder1, placeholder2 = st.beta_columns(3)
 
             with col3:
-                detailed = st.select_slider(label = "Query type", options=["Simple query", "Detailed query"])
+                detailed = st.radio(label = "Query type", options=["Simple query", "Detailed query"])
             
             ## supporting variables for the simple general form
             min_odo = sliced_model["odometer"].min().item()
@@ -108,7 +108,7 @@ elif opt == "Price prediction":
                         age = current_year - age
 
                 with odometer_col:
-                    odometer = st.slider(label="Odometer value in KM's", min_value=min_odo, max_value=max_odo, step= 100.00)
+                    odometer = st.slider(label="Odometer value in KM's", min_value=0.00, max_value=max_odo, step= 100.00)
 
                 ############################################ SECTION SEPARATOR FOR VISIBILITY ############################################
 
