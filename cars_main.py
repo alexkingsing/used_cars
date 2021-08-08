@@ -1,4 +1,5 @@
 import datetime
+from typing_extensions import final
 
 import numpy as np
 import streamlit as st
@@ -189,11 +190,30 @@ elif opt == "Price prediction":
             if form == True:
                 
                 array_to_predict = transform(display_table, categorical_encoder, numerical_encoder)
-                prediction = model.predict(array_to_predict).item()            
+                prediction = model.predict(array_to_predict).reshape(1)
+                upper_limit = (prediction + (2*deviation)).reshape(1)
+                lower_limit = (prediction - (2*deviation)).reshape(1)
+                
+                upper_limit = pd.DataFrame(
+                    {'Maximum price': upper_limit}, index=[""])
 
-                figure = plot(prediction, deviation)
+                prediction = pd.DataFrame(
+                    {'Expected price': prediction}, index=[""])
 
-                st.plotly_chart(figure, use_container_width = True) 
+                lower_limit = pd.DataFrame(
+                    {'Minimum price': lower_limit}, index=[""])
+
+                #v2 change: Instead of plot, tables.
+                final1, final2, final3 = st.beta_columns(3)
+
+                with final1:
+                    st.table(upper_limit)
+                
+                with final2:
+                    st.table(prediction)
+
+                with final3:
+                    st.table(lower_limit)
 
 ## PENDING
 elif opt == "Tool explanation":

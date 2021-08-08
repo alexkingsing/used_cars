@@ -138,6 +138,7 @@ def transform(data, cat_enc, num_enc) -> np.array:
     return result_array
 
 ## COMPLETED
+## DEPRECATED
 # Not worth caching as this func only runs at the end of a new data stream.
 def plot(prediction, deviation):
     '''
