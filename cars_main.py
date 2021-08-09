@@ -57,7 +57,7 @@ elif opt == "Price prediction":
 
     with col1:
         # Storing the selected manufacturer.
-        mfg = st.selectbox("Manufacturer", options=mfg_base)
+        mfg = st.selectbox("Manufacturer", options=mfg_base, help="Click on the dropdown a box and select a manufacturer! It's the second most important feature to determine a price.")
 
     if mfg != "":
         # Delimit the current running table based on the MFG choice
@@ -231,8 +231,13 @@ elif opt == "Tool explanation":
             st.image(load_exp("horse"))
     st.write(load_exp("ml_close"))
 
-    # MODEL SECTION
+    # MODEL INTRO SECTION
     st.header(load_exp("model_title"))
     st.write(load_exp("model_intro"))
+    st.image(load_exp("model_image"), caption="The Neural Network powering your queries!", width=750)
+
+    # MODEL INPUTS SECTION
+    st.header(load_exp("model_inputs_title"))
+
     st.table(np.array([["Car manufacturer","Car model", "Manufacture year", "Odometer", "Car's condition", "Fuel type", "Drive type",
     "Car's type", "Car's cylinders", "Buyer's state", "Transmission type", "Car's color"]]))

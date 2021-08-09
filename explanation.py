@@ -14,8 +14,10 @@ No? click the button below!''',
             "horse": "images/horse.jpg",
             "ml_close": '''What we did just now is a **very simplified** version of machine learning!
 We discussed characteristics (features in ML/DL) of the animal, and then you (the machine!) tried to guess what it was.''',
-            "model_title":'''How does this model work?''',
-            "model_intro":''' Before we can -roughly- explain how the model works, let's explore the inputs.
-            The table below summarizes the information required for this model to work.''',
-            "model_intro2": ''' ''',
-            "model_explanation": ''' '''}
+            "model_title":'''What is the model behind this calculator?''',
+            "model_intro":''' An image says more than a thousand words! So instead of describing it, let me share a picture of
+            how the model looks like:''',
+            "model_image": "images/ANN.png",
+            "model_intro2": '''Now, this doesn't explain much by itself, so let me start by the beginning: **The model inputs**.''',
+            "model_inputs_title": '''Model inputs''',
+            "model_inputs_exp": ''' '''}
