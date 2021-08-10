@@ -10,7 +10,7 @@ from utils import *
 #configs
 st.set_page_config(layout="wide")
 
-# Manually adding the RMSE of the Keras model for plot use.
+# Manually adding the RMSE of the Keras model for general purposes.
 deviation = 2894.679202
 
 # Loading model, categories and encoders.
@@ -25,6 +25,7 @@ mfg_base = np.sort(mfg_base)
 
 # Start with titles and landing-page design.
 st.title("U.S.A Used vehicles price prediction! (BETA)")
+st.caption("Version 0.9")
 st.sidebar.subheader("Choose what you want to see!")
 opt = st.sidebar.radio("", ["Introduction","Price prediction", "Tool explanation"], )
 
@@ -57,7 +58,8 @@ elif opt == "Price prediction":
 
     with col1:
         # Storing the selected manufacturer.
-        mfg = st.selectbox("Manufacturer", options=mfg_base, help="Click on the dropdown a box and select a manufacturer! It's the second most important feature to determine a price.")
+        mfg = st.selectbox("Manufacturer", options=mfg_base, 
+        help="Click on the dropdown a box and select a manufacturer! **It's the most important feature to determine a price**.")
 
     if mfg != "":
         # Delimit the current running table based on the MFG choice
@@ -82,10 +84,10 @@ elif opt == "Price prediction":
             col3, placeholder1, placeholder2 = st.beta_columns(3)
 
             with col3:
-                detailed = st.radio(label = "Query type", options=["Simple query", "Detailed query"])
+                detailed = st.radio(label = "Query type", options=["Simple query", "Detailed query"], 
+                help="A simple query only has 2 parameters to customize. A detailed query has 10 parameters!")
             
             ## supporting variables for the simple general form
-            min_odo = sliced_model["odometer"].min().item()
             max_odo = sliced_model["odometer"].max().item()
             min_age = sliced_model["age"].min().item()
             max_age = sliced_model["age"].max().item()
@@ -99,17 +101,19 @@ elif opt == "Price prediction":
                 
                 with year_col:
                     # Since the base does not work with year, but with age, we will perform some transformations before continuing.
-                    min_year = current_year - max_age
-                    max_year = current_year - min_age
-                    if max_year <= min_year:
+                    min_year = current_year - max_age # get the lower boundary by substracting the max age from the current year.
+                    max_year = current_year - min_age # get the upper boundar by substracting the min age from current year.
+                    if max_year <= min_year: # if the boundaries are equal or strange, set it to the closest time.
                         st.write(f"The manufacture year for this vehicle has been set to: **{max_year}**")
                         age = current_year - max_year 
                     else:
-                        age = st.slider(label= "Manufacture year", min_value= min_year, max_value= max_year, step = 1.00)
+                        age = st.slider(label= "Manufacture year", min_value= min_year, max_value= max_year, step = 1.00,
+                        help="Set the manufacture year for the vehicle. **This is the 2nd most important feature**! The older the car the more value it loses!")
                         age = current_year - age
 
                 with odometer_col:
-                    odometer = st.slider(label="Odometer value in KM's", min_value=0.00, max_value=max_odo, step= 100.00)
+                    odometer = st.slider(label="Odometer value in miles", min_value=0.00, max_value=max_odo, step= 100.00,
+                    help="The range of miles in the vehicles odometer. The higher this value, **the more value the car loses!**")
 
                 ############################################ SECTION SEPARATOR FOR VISIBILITY ############################################
 
@@ -194,12 +198,13 @@ elif opt == "Price prediction":
                 upper_limit = (prediction + (2*deviation)).reshape(1)
                 lower_limit = (prediction - (2*deviation)).reshape(1)
                 
+                #  Setting a dataframe for easier solution rendering.
                 upper_limit = pd.DataFrame(
                     {'Maximum price': upper_limit}, index=[""])
-
+                #  Setting a dataframe for easier solution rendering.
                 prediction = pd.DataFrame(
                     {'Expected price': prediction}, index=[""])
-
+                #  Setting a dataframe for easier solution rendering.
                 lower_limit = pd.DataFrame(
                     {'Minimum price': lower_limit}, index=[""])
 
@@ -217,6 +222,8 @@ elif opt == "Price prediction":
 
 ## PENDING
 elif opt == "Tool explanation":
+
+    st.header("*SECTION CURRENTLY UNDER CONSTRUCTION...*")
 
     # ML SECTION
     st.write(load_exp("intro"))
