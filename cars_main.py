@@ -198,13 +198,11 @@ elif opt == "Price prediction":
                 upper_limit = (prediction + (2*deviation)).reshape(1)
                 lower_limit = (prediction - (2*deviation)).reshape(1)
                 
-                #  Setting a dataframe for easier solution rendering.
+                #  Setting dataframes for easier solution rendering.
                 upper_limit = pd.DataFrame(
                     {'Maximum price': upper_limit}, index=[""])
-                #  Setting a dataframe for easier solution rendering.
                 prediction = pd.DataFrame(
                     {'Expected price': prediction}, index=[""])
-                #  Setting a dataframe for easier solution rendering.
                 lower_limit = pd.DataFrame(
                     {'Minimum price': lower_limit}, index=[""])
 
