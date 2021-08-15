@@ -113,7 +113,7 @@ elif opt == "Price prediction":
 
                 with odometer_col:
                     odometer = st.slider(label="Odometer value in miles", min_value=0.00, max_value=max_odo, step= 100.00,
-                    help="The range of miles in the vehicles odometer. The higher this value, **the more value the car loses!**")
+                    help="The range of miles in the vehicles odometer. **This is the third most important feature!** The higher this value, the more value the car loses")
 
                 ############################################ SECTION SEPARATOR FOR VISIBILITY ############################################
 
@@ -136,49 +136,57 @@ elif opt == "Price prediction":
                         if isinstance(condition, str) == True:
                             st.write(f"Car's condition has been set to **{condition}**")
                         else:
-                            condition = st.selectbox("Car's condition", options=condition)
+                            condition = st.selectbox("Car's condition", options=condition,
+                            help="Seller's advertised condition. Results vary, but in general, **the better the car's condition, the more expensive it is**.")
                         
                         cylinders = detailed_view(sliced_model, "cylinders")
                         if isinstance(cylinders, str) == True:
                             st.write(f"Car's cylinders have been set to **{cylinders}**")
                         else:
-                            cylinders = st.selectbox("Car's cylinders", options=cylinders)
+                            cylinders = st.selectbox("Car's cylinders", options=cylinders,
+                            help="Number of cylinders in the car's engine. **Low importance feature**.")
                     
                     with detail_col2:
                         fuel = detailed_view(sliced_model, "fuel")
                         if isinstance(fuel, str) == True:
                             st.write(f"Car's fuel type has been set to: **{fuel}**")
                         else:
-                            fuel = st.selectbox("Car's fuel", options=fuel)
+                            fuel = st.selectbox("Car's fuel", options=fuel,
+                            help="Type of fuel the car requires. **Low importance feature**")
                         
                         state = detailed_view(sliced_model, "state")
-                        state = st.selectbox("Buyer's state", options=state)
+                        state = st.selectbox("Buyer's state", options=state,
+                            help="State where the vehicle is being sold. **Low importance feature**")
                     
                     with detail_col3:
                         drive = detailed_view(sliced_model, "drive")
                         if isinstance(drive, str) == True:
                             st.write(f"Car's drive type has been set to: **{drive}**")
                         else:
-                            drive = st.selectbox("Drive type", options=drive)
+                            drive = st.selectbox("Drive type", options=drive,
+                            help="Vehicle's type of drive. Results are unstable, but feature holds **mild importance**.")
                         
                         transmission = detailed_view(sliced_model, "transmission")
                         if isinstance(transmission, str) == True:
                             st.write(f"Transmission type set to: **{transmission}**")
                         else:
-                            transmission = st.selectbox("Transmission type", options=transmission)
+                            transmission = st.selectbox("Transmission type", options=transmission,
+                            help="Car's transmission. **Second least important feature**.")
                     
                     with detail_col4:
                         car_type = detailed_view(sliced_model, "type")
                         if isinstance(car_type, str) == True:
                             st.write(f"Car's type has been set to: **{car_type}**")
                         else:
-                            car_type = st.selectbox("Car type", options=car_type)
+                            car_type = st.selectbox("Car type", options=car_type,
+                            help="Car's type. Highly model dependant. Results are unstable, but feature holds **mild importance**.")
                         
                         color = detailed_view(sliced_model, "paint_color")
                         if isinstance(color, str) == True:
                             st.write(f"Car's color has been set to: **{color}**")
                         else:
-                            color = st.selectbox("Car's color", options=color)
+                            color = st.selectbox("Car's color", options=color,
+                            help="Car's color. **This is the least important feature**.")
                 
 
                 features = {"mfg":mfg, "model": car_model, "condition":condition, "cylinders": cylinders, "fuel":fuel, "trans": transmission,

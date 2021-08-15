@@ -12,4 +12,4 @@ intro = {"opening": '''Welcome! My name is **Alexander J. King Sing Ortiz** and 
         "contact": '''**Contact info**:
                    \n *Student email*: akingsin@simon.rochester.edu
                    \n *Personal email*: ajkso92@gmail.com''',
-        "disclaimer":'''**Disclaimer**: This tool does NOT represent buy or sale advice.'''}
+        "disclaimer":'''**Disclaimer**: This tool does NOT represent buy or sale advice of any kind.'''}
