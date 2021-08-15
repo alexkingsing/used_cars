@@ -28,7 +28,7 @@ One-hot encoding transforms a categorical column (Think of color) and transforms
 Why is this needed? For a simple reason **computers don't understand what colors are or how to work with them** so we need to
 transform into something a computer understands: numbers. \n
 That said, this is all too abstract, so once again let's see how One-hot encoding works in practice:''',
-            "one-hot": "images\onehot.png",
+            "one-hot": "images/onehot.png",
             "model_inputs_exp3": ''' This explains what happens to our categorical columns (Model, color, etc), but what about our
 numerical columns? Well in the case of numerical columns we don't need to one-hot encode, but we still need to **adjust them!**
 The preferred adjustment is called **Standard Scaling**.\n
