@@ -248,9 +248,18 @@ elif opt == "Tool explanation":
     st.header(load_exp("model_title"))
     st.write(load_exp("model_intro"))
     st.image(load_exp("model_image"), caption="The Neural Network powering your queries!", width=750)
+    st.write(load_exp("model_intro2"))
 
     # MODEL INPUTS SECTION
     st.header(load_exp("model_inputs_title"))
-
+    st.write(load_exp("model_inputs_exp"))
     st.table(np.array([["Car manufacturer","Car model", "Manufacture year", "Odometer", "Car's condition", "Fuel type", "Drive type",
     "Car's type", "Car's cylinders", "Buyer's state", "Transmission type", "Car's color"]]))
+    st.write(load_exp("model_inputs_exp2"))
+    st.image(load_exp("one-hot"))
+    st.write(load_exp("model_inputs_exp3"))
+    st.latex(r" z = \frac{(x - \mu)}{s}")
+    st.write(load_exp("model_inputs_close"))
+
+    # MODEL INPUTS SECTION
+    st.header(load_exp("model_general_title"))
