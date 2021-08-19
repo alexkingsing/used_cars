@@ -263,3 +263,4 @@ elif opt == "Tool explanation":
 
     # MODEL INPUTS SECTION
     st.header(load_exp("model_general_title"))
+    st.write(load_exp("model_general_exp1"))

@@ -45,4 +45,4 @@ Standard scaling performs the following adjustment for every number: ''',
 With that, we understand what's happening to our inputs BEFORE they enter the model, but what happens in the model? \n
 **Let's find out!**''',
             "model_general_title": ''' Model explanation''',
-            "model_general_": ''' BLABLABLA'''}
+            "model_general_exp1": ''' BLABLABLA'''}
