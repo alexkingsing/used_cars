@@ -1,7 +1,7 @@
 exp = {"intro": '''Welcome to the explanation section! In here I will provide a **simplified explanation on what is Machine/Deep Learning**.
 After that, I will explain with a bit more detail **how the model you're using here works!** \n
 So let's get to it!\n
-**WARNING**: This section is LONG and somewhat detailed. If not deeply interested, please avoid.''',
+**NOTE**: This section is long and somewhat detailed. If not deeply interested, please avoid.''',
             "ml_title": "What is Machine / Deep Learning?",
             "ml_intro":'''So, what is Machine Learning? Long story short, machine learning can be summarized:
     **The process under which an algorithm, based on repeated data and statistic principles, 'learns' a task.** Abstract, right?
@@ -45,4 +45,41 @@ Standard scaling performs the following adjustment for every number: ''',
 With that, we understand what's happening to our inputs BEFORE they enter the model, but what happens in the model? \n
 **Let's find out!**''',
             "model_general_title": ''' Model explanation''',
-            "model_general_exp1": ''' BLABLABLA'''}
+            "model_general_exp1": ''' Now that we know what's coming into the model we need to find out how does it work! \n
+To explain how a neural networks completely it's actually an area of active research (as of 2020. See: *Adaptive Explainable Neural Networks* (AxNNs) by Chen et al.) \n
+However we can explain the *basic logic* of how a Neural Network learns. First we need to talk a bit about neurons, which are the
+building blocks of neural networks. **Neurons** in deep/machine learning are extremely similar to their biological counterpart 
+(They are modeled after them!) in the sense that they work as a bridge that connects one side to another until an outcome is reached. 
+\n A neuron takes one or many inputs, "consolidates" them through an activation function and returns an outcome: 
+A number, True/False, etc.''',
+            "neuron": "images/Neuron.png",
+            "model_general_exp2": ''' So that's a neuron. And what's a neural network? **It's just many neurons connected**. Now,
+there are **MANY** ways to connect the Neurons (One of the key differences of different types of NN), but in our case we are using the
+simplest form of NN: **A feed-forward neural network** which means every neuron is connected to all the inputs that came before it,
+and all the neurons in the next layer. 
+\n At the input layer those x you see in the image are the inputs we just discussed! But what happens later? Let us now discuss:
+\n ** Hidden Layers**.''',
+            "model_general_exp3": '''So what are hidden layers? They are still the same neurons, but hidden layers are 
+** not directly connected to neither the inputs nor to the final output** this is why they're called "hidden". Hidden layers
+only interact with other neurons, either the front of in the back, but are not *visible* to the user or to other applications.
+Hidden layers are the ones that are actually responsible for the excellent performance and complexity of neural networks because they
+perform **MANY** functions (data transformation, automatic feature creation, etc.).
+Hidden layers are the subject of much research (how many layers? how many neurons?) So this will be all I'll say about Neural Networks.
+\n The **Output layer** of a model is the output layer, which generates the final result of our model! Now, depending on what we want
+this can be a label (Think dog, cat, etc) OR a number (like in here!). The output layer can be one neuron if we want a number
+or a binary result (True / False), or if we want to identify categories (happy, sad, nervous, etc) we use many output neurons.
+In our case since our end result is a number, the NN only has one output neuron!
+\n Now we move on to our last section!''',
+            "model_final_title": ''' How a neural network learns!''',
+            "model_final_exp": ''' So far we have reviewed how a neural network is built but NOT how learns (which is the most important thing!)
+Let's start at the beginning: **When a neural net is being trained, all of its weights, values, etc, are INITIALLY set to random values.** 
+Training data is fed to the input layer, and it passes through the succeeding layers, getting multiplied and added together in complex ways, 
+until it finally arrives, radically transformed, at the output layer. But there's a problem here, what if the NN is wrong?
+Here comes the magic and the true power of neural networks. They learn by training, just like humans!
+\n A neural network is trained by adjusting neuron input weights based on the network's performance on example inputs. 
+If the network classifies an image correctly, or predicts the correct (closest) price for a vehicle,
+the weights contributing to the correct answer are increased, while other weights are decreased. 
+If the network misclassifies an image, or provides a wildly incorrect number, the weights are adjusted in the opposite direction.
+\n This process of learning by mistakes is called, in ML, ** Backpropagation** and it looks like this:''',
+            "backp": "images/backp.png",
+            "model_final": ''' DA ENDING WORDS'''}

@@ -261,6 +261,15 @@ elif opt == "Tool explanation":
     st.latex(r" z = \frac{(x - \mu)}{s}")
     st.write(load_exp("model_inputs_close"))
 
-    # MODEL INPUTS SECTION
+    # FULL MODEL SECTION
     st.header(load_exp("model_general_title"))
     st.write(load_exp("model_general_exp1"))
+    st.image(load_exp("neuron"), caption="A neuron in a neural network.", width=500)
+    st.write(load_exp("model_general_exp2"))
+    st.write(load_exp("model_general_exp3"))
+
+    ## END SEC
+    st.header(load_exp("model_final_title"))
+    st.write(load_exp("model_final_exp"))
+    st.image(load_exp("backp"), caption="Backpropagation in action.", width=750)
+    st.write(load_exp("model_final"))
