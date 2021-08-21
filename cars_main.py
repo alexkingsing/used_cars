@@ -24,8 +24,8 @@ mfg_base = np.concatenate([np.array([""]), mfg_base]) # adding an empty value at
 mfg_base = np.sort(mfg_base)
 
 # Start with titles and landing-page design.
-st.title("U.S.A Used vehicles price prediction! (BETA)")
-st.caption("Version 0.9")
+st.title("U.S.A Used vehicles price prediction!")
+st.caption("Version 1.0")
 st.sidebar.subheader("Choose what you want to see!")
 opt = st.sidebar.radio("", ["Introduction","Price prediction", "Tool explanation"], )
 
