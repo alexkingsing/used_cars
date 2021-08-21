@@ -47,10 +47,9 @@ if opt == "Introduction":
     # Contact info
     st.write(load_intro("contact"))
 
-
             ############################################ SECTION SEPARATOR FOR VISIBILITY ############################################
 
-## IN COMPLETED
+## COMPLETED
 elif opt == "Price prediction":
     st.subheader("To start, select a vehicle manufacturer and model!")
     # Sub-columns to allow both decisions to be in the same position.
@@ -226,7 +225,7 @@ elif opt == "Price prediction":
                 with final3:
                     st.table(lower_limit)
 
-## PENDING
+## COMPLETED
 elif opt == "Tool explanation":
 
     st.header("*SECTION CURRENTLY UNDER CONSTRUCTION...*")
@@ -273,3 +272,5 @@ elif opt == "Tool explanation":
     st.write(load_exp("model_final_exp"))
     st.image(load_exp("backp"), caption="Backpropagation in action.", width=750)
     st.write(load_exp("model_final"))
+
+

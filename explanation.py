@@ -80,6 +80,14 @@ Here comes the magic and the true power of neural networks. They learn by traini
 If the network classifies an image correctly, or predicts the correct (closest) price for a vehicle,
 the weights contributing to the correct answer are increased, while other weights are decreased. 
 If the network misclassifies an image, or provides a wildly incorrect number, the weights are adjusted in the opposite direction.
-\n This process of learning by mistakes is called, in ML, ** Backpropagation** and it looks like this:''',
+\n This process of learning by mistakes is called, in ML, ** backpropagation** and it looks like this:''',
             "backp": "images/backp.png",
-            "model_final": ''' DA ENDING WORDS'''}
+            "model_final": ''' So now we know how a neural network works! What about this project? Well, it does **exactly the same**.
+Let's summarize everything that's going below the hood once again:
+\n **First**, the inputs are transformed to something a machine can read via **one-hot encoding** and **standard scaling**.
+\n **Next**, the newly-transformed data is fed into the input layer.
+\n **Later**, the data passes through 3 hidden layers where it is transformed, filtered and much more, before finally moving into the final layer.
+\n **Then**, the remaining data reaches the output layer where it undergoes one final transformation to deliver the number we want. Voila!
+\n **Finally**, this process is repeated many times during training until the NN cannot improve its results anymore.
+\n And that's it! I hope this explanation shed some light on how this works, but the world of machine learning is vast!
+I once again thank you for reading this and I hope you enjoyed using this tool!'''}
